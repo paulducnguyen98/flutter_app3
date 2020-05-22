@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         canvasColor: Colors.white,
-        scaffoldBackgroundColor: Hexcolor("#60bac4"),
+        scaffoldBackgroundColor: Hexcolor("#1e6496"),
         primaryColor: Hexcolor("#014d6b"),
         primaryIconTheme: IconThemeData(color: Colors.white),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterapp3/Utils/weatherHelper.dart';
 import 'package:flutterapp3/constant/Constant.dart';
 import 'package:flutterapp3/model/city.dart';
 import 'package:flutterapp3/Utils/Util.dart' as Util;
@@ -20,8 +21,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   ResultWeather reponseWeather = new ResultWeather();
   Weather weather = new Weather();
-  List<Weather> lsCurentWeather = new List();
-  List<Weather> lsWeatherFor5Day = new List();
+  List<Weather> listWeather = new List();
+  List<Weather> listWeather5Days = new List();
   String curentCity;
 
   Future<ResultWeather> getData() async {
@@ -52,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     setState(() {
       this.reponseWeather = tempReponseWeather;
-      this.lsCurentWeather = curentWeathers;
-      this.lsWeatherFor5Day = weatherFor5Days;
+      this.listWeather = curentWeathers;
+      this.listWeather5Days = weatherFor5Days;
       this.weather = tempWeather;
     });
   }
@@ -110,16 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Center(
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 20.0),
                     Container(
                       alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            //image: AssetImage('assets/images/.jpg'),
-                            image: AssetImage(''),
-                            fit: BoxFit.fill,
-                            alignment: Alignment.centerRight),
-                      ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40.0),
                         child: Column(
@@ -127,6 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
+                            SizedBox(height: 10.0),
                             Text(
                               "${this.reponseWeather != null ? this.reponseWeather.city.name : ""}",
                               style: TextStyle(
@@ -142,8 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${weather != null ? (weather.main.temp_max - 273.15).toStringAsFixed(2) : 0}' +
-                                      '°',
+                                  '${weather != null ? (weather.main.temp_max - 273.15).toStringAsFixed(0) : 0}' +
+                                      '°C',
                                   style: TextStyle(
                                     fontSize: 50.0,
                                     fontWeight: FontWeight.w700,
@@ -195,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       margin: const EdgeInsets.all(10.0),
                       padding: const EdgeInsets.all(20.0),
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                       ),
                     ),
                     Row(
@@ -205,12 +199,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 250.0,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
-                              itemCount: this.lsCurentWeather == null
+                              itemCount: this.listWeather == null
                                   ? 0
-                                  : this.lsCurentWeather.length,
+                                  : this.listWeather.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return ElementForAnHour(
-                                    weather: this.lsCurentWeather[index]);
+                                    weather: this.listWeather[index]);
                               },
                             ),
                           ),
@@ -242,12 +236,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 250.0,
                             child: ListView.builder(
                               scrollDirection: Axis.vertical,
-                              itemCount: this.lsWeatherFor5Day == null
+                              itemCount: this.listWeather5Days == null
                                   ? 0
-                                  : (this.lsWeatherFor5Day.length / 8.0).ceil(),
+                                  : (this.listWeather5Days.length / 8.0).ceil(),
                               itemBuilder: (BuildContext context, int index) {
                                 return ElementsForADay(
-                                    weather: this.lsWeatherFor5Day[index * 8]);
+                                    weather: this.listWeather5Days[index * 8]);
                               },
                             ),
                           ),
@@ -272,6 +266,260 @@ class _HomeScreenState extends State<HomeScreen> {
                             ]),
                       ),
                     ),
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0)),
+                                  elevation: 2.0,
+                                  onPressed: null,
+                                  disabledColor: Colors.white,
+                                  disabledElevation: 2.0,
+                                  disabledTextColor: Colors.black,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 140.0,
+                                    height: 120.0,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Container(
+                                            height: 5.0,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                                color: Colors.lightBlueAccent),
+                                          ),
+                                        ),
+                                        SizedBox(height: 20.0),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Image.asset(
+                                              'assets/images/drop.png',
+                                              width: 20,
+                                            ),
+                                            Text(
+                                              "  Humidity",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 16.0),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 6.0),
+                                        Text(
+                                          weather.main.hummylity.toString() +
+                                              "%",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 24.0),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  color: Colors.white,
+                                ),
+                                RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0)),
+                                  elevation: 2.0,
+                                  onPressed: null,
+                                  disabledColor: Colors.white,
+                                  disabledElevation: 2.0,
+                                  disabledTextColor: Colors.black,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 140.0,
+                                    height: 120.0,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Container(
+                                            height: 5.0,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                                color: Colors.orangeAccent),
+                                          ),
+                                        ),
+                                        SizedBox(height: 20.0),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Image.asset(
+                                              'assets/images/sunny.png',
+                                              width: 20,
+                                            ),
+                                            Text(
+                                              "  Visibility",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 16.0),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 6.0),
+                                        Text(
+                                          reponseWeather.list[0].main.hummylity
+                                                      .toString() ==
+                                                  'null'
+                                              ? 'N/A'
+                                              : reponseWeather
+                                                      .list[0].main.hummylity
+                                                      .toString() +
+                                                  ' m',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 24.0),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0)),
+                                  elevation: 2.0,
+                                  onPressed: null,
+                                  disabledColor: Colors.white,
+                                  disabledElevation: 2.0,
+                                  disabledTextColor: Colors.black,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 140.0,
+                                    height: 120.0,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Container(
+                                            height: 5.0,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                                color: Colors.purpleAccent),
+                                          ),
+                                        ),
+                                        SizedBox(height: 20.0),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Image.asset(
+                                              'assets/images/sunny.png',
+                                              width: 20,
+                                            ),
+                                            Text(
+                                              "  Sunrise",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 16.0),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 6.0),
+                                        Text(
+                                          '${WeatherHelper.getClockInUtcPlus3Hours(reponseWeather.city.sunrise)}',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 24.0),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  color: Colors.white,
+                                ),
+                                RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0)),
+                                  elevation: 2.0,
+                                  onPressed: null,
+                                  disabledColor: Colors.white,
+                                  disabledElevation: 2.0,
+                                  disabledTextColor: Colors.black,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 140.0,
+                                    height: 120.0,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Container(
+                                            height: 5.0,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                                color: Colors.pinkAccent),
+                                          ),
+                                        ),
+                                        SizedBox(height: 20.0),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Image.asset(
+                                              'assets/images/brakes.png',
+                                              width: 20,
+                                            ),
+                                            Text(
+                                              "  Pressure",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 16.0),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 6.0),
+                                        Text(
+                                          weather.main.pressure.toString() +
+                                              " hPa",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 24.0),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  color: Colors.white,
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               )),
@@ -285,25 +533,25 @@ class _HomeScreenState extends State<HomeScreen> {
               UserAccountsDrawerHeader(
                 accountName: Text(
                   "Duc Nguyen",
-                  style: TextStyle(color: Colors.brown),
+                  style: TextStyle(color: Colors.white),
                 ),
                 accountEmail: Text(
                   "paulducnguyen98@gmail.com",
-                  style: TextStyle(color: Colors.brown),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
               ListTile(
-                  leading: Icon(Icons.home, color: Colors.brown),
+                  leading: Icon(Icons.home, color: Colors.black),
                   title: Text(
                     " Home",
-                    style: TextStyle(color: Colors.brown),
+                    style: TextStyle(color: Colors.black),
                   ),
                   onTap: () {
                     Navigator.pop(context);
                   }),
               ListTile(
-                  leading: Icon(Icons.settings, color: Colors.brown),
-                  title: Text("Setting", style: TextStyle(color: Colors.brown)),
+                  leading: Icon(Icons.settings, color: Colors.black),
+                  title: Text("Setting", style: TextStyle(color: Colors.black)),
                   onTap: () {
                     Navigator.pop(context);
                   }),

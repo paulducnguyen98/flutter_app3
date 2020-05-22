@@ -1,11 +1,11 @@
 class Wind {
-  double speech;
+  double speed;
   int deg;
 
-  Wind({this.speech, this.deg});
+  Wind({this.speed, this.deg});
 
   factory Wind.fromJson(Map<String, dynamic> json) =>
-      Wind(speech: json["speech"], deg: json["deg"]);
+      Wind(speed: json["speed"], deg: json["deg"]);
 
-  Map<String, dynamic> toJson() => {"speech": speech, "deg": deg};
+  Map<String, dynamic> toJson() => {"speed": speed, "deg": deg};
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutterapp3/Utils/dateTimeHelper.dart';
 import 'package:flutterapp3/model/resultWeather.dart';
 import 'package:flutterapp3/model/weather.dart';
 import 'package:flutterapp3/model/weatherElement.dart';
@@ -27,7 +28,7 @@ class ElementsForADay extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Wrap(
-                      spacing: 15.0,
+                      spacing: 80.0,
                       children: <Widget>[
                         Text(
                           '${weather.dt_txt.month}/${weather.dt_txt.day}/${weather.dt_txt.year}',
@@ -38,10 +39,9 @@ class ElementsForADay extends StatelessWidget {
                           style: TextStyle(color: Colors.white, fontSize: 15.0),
                         ),
                         Text(
-                          '${weather != null ? (weather.main.temp_min - 273.15).toStringAsFixed(2) : 0}° / ${weather != null ? (weather.main.temp_max - 273.15).toStringAsFixed(2) : 0}°',
+                          '${weather != null ? (weather.main.temp_max - 273.15).toStringAsFixed(0) : 0}°C',
                           style: TextStyle(color: Colors.white, fontSize: 15.0),
                         ),
-
                       ],
                     )
                   ]),

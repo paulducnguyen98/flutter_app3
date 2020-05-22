@@ -18,7 +18,11 @@ class ElementForAnHour extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
-          Text('${weather.dt_txt.hour}h ${weather.dt_txt.minute}p', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 18.0)),
+          Text('${weather.dt_txt.hour}h',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18.0)),
           Image.network(
               'http://openweathermap.org/img/wn/${weather != null ? weather.weather[0].icon : '10d'}@2x.png'),
           SizedBox(
@@ -27,12 +31,12 @@ class ElementForAnHour extends StatelessWidget {
           RichText(
               text: TextSpan(
                   text:
-                      '${weather != null ? (weather.main.temp - 273).toStringAsFixed(1) : 0}',
+                      '${weather != null ? (weather.main.temp - 273).toStringAsFixed(0) : 0}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
                   children: [
-                TextSpan(text: "°"),
+                TextSpan(text: "°C"),
               ]))
         ],
       ),
